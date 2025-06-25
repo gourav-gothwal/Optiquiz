@@ -1,4 +1,4 @@
-package com.example.quizapp.activity
+package com.example.quizapp.Activity
 
 class ScoreActivity {
 }
