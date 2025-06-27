@@ -1,5 +1,6 @@
 package com.example.quizapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -7,6 +8,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.quizapp.R
+import com.example.quizapp.activity.ScoreActivity
 import com.example.quizapp.api.ApiClient
 import com.example.quizapp.models.Question
 import com.example.quizapp.models.QuestionResponse
@@ -46,7 +48,27 @@ class QuestionPage : Fragment() {
                 currentIndex++
                 showQuestion()
             } else {
-                Toast.makeText(requireContext(), "Quiz Completed!", Toast.LENGTH_SHORT).show()
+                // Calculate and pass results
+                var correctCount = 0
+                for (i in questions.indices) {
+                    if (selectedAnswers[i] == questions[i].correct_answer) {
+                        correctCount++
+                    }
+                }
+
+                val totalQuestions = questions.size
+                val incorrectCount = totalQuestions - correctCount
+                val totalCoins = correctCount * 5
+                val score = totalCoins
+
+                val intent = Intent(requireContext(), ScoreActivity::class.java).apply {
+                    putExtra("score", score)
+                    putExtra("coins", totalCoins)
+                    putExtra("correct", correctCount)
+                    putExtra("incorrect", incorrectCount)
+                    putExtra("totalQuestions", totalQuestions)
+                }
+                startActivity(intent)
             }
         }
 
@@ -96,7 +118,6 @@ class QuestionPage : Fragment() {
             imageView.visibility = View.GONE
         }
 
-        // Shuffle options
         val options = (question.incorrect_answers + question.correct_answer).shuffled()
         optionsContainer.removeAllViews()
 

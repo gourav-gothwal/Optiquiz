@@ -1,4 +1,4 @@
-package com.example.quizapp.Activity
+package com.example.quizapp.activity
 
 class LeaderActivity {
 }
